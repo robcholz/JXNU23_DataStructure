@@ -1,10 +1,6 @@
-mod path;
+mod murphy;
 
-use std::fs;
-use serde::{Deserialize, Serialize};
-
-
-#[derive(Serialize, Deserialize)]
+#[derive(Debug)]
 struct MGraphData {
     vertex_num: u64,
     edge_num: u64,
@@ -14,6 +10,7 @@ struct MGraphData {
 
 // vertex type, edge type
 #[derive(Clone)]
+#[derive(Debug)]
 struct MGraph<VT, ET> {
     vertex_num: u64,
     edge_num: u64,
@@ -29,11 +26,13 @@ struct EdgeNode {
 }
 
 #[derive(Clone)]
+#[derive(Debug)]
 struct VertexNode<VT> {
     vertex: VT,
     first_edge: Option<Box<EdgeNode>>,
 }
 
+#[derive(Debug)]
 struct LinkedGraph<T> {
     vertex_num: u64,
     edge_num: u64,
@@ -76,10 +75,17 @@ impl<VT> VertexNode<VT> {
 
 impl<T> LinkedGraph<T> {
     pub fn new(data_path: &str, direction: bool) -> LinkedGraph<String> {
-        let str = fs::read_to_string(data_path)
-            .expect("Invalid file path.");
-        let data: MGraphData = serde_json::from_str(&str)
-            .expect("Failed to parse json.");
+        let data: MGraphData = MGraphData {
+                    vertex_num: 4,
+                    edge_num: 4,
+                    values: String::from("01234"),
+                    connections: vec![
+                        vec![0, 1, 56],
+                        vec![0, 2, 34],
+                        vec![0, 3, 78],
+                        vec![2, 3, 25],
+                    ],
+                };
         let adjacents = &mut Vec::<VertexNode<String>>::new();
         let vertex_values: Vec<_> = data.values.chars().collect();
         adjacents.reserve(data.vertex_num as usize);
@@ -116,10 +122,17 @@ impl<T> LinkedGraph<T> {
 
 impl<VT, ET> MGraph<VT, ET> {
     pub fn new(data_path: &str, direction: bool) -> MGraph<String, u64> {
-        let str = fs::read_to_string(data_path)
-            .expect("Invalid file path.");
-        let data: MGraphData = serde_json::from_str(&str)
-            .expect("Failed to parse json.");
+        let data: MGraphData = MGraphData {
+                    vertex_num: 4,
+                    edge_num: 4,
+                    values: String::from("01234"),
+                    connections: vec![
+                        vec![0, 1, 56],
+                        vec![0, 2, 34],
+                        vec![0, 3, 78],
+                        vec![2, 3, 25],
+                    ],
+                };
         let mut vertexes = Vec::<String>::new();
         for char in data.values.chars() {
             vertexes.push(std::string::String::from(char));
@@ -134,6 +147,10 @@ impl<VT, ET> MGraph<VT, ET> {
 }
 
 fn main(){
-    let graph = LinkedGraph::<String>::new(path::metadata_path, true);
-    println!("");
+    murphy::mur_profiler_module("Lab8");
+    let graph = LinkedGraph::<String>::new("", true);
+    murphy::mur_profiler_test_lambda("1.TODO", true, &|| {
+            println!("{:?}",graph);
+            println!();
+        });
 }

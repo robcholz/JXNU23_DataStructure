@@ -2,10 +2,6 @@ set_project("JXNU23_DataStructure")
 set_languages("cxx17")
 
 
---add_requires("cargo::serde 1.0.193",{ configs = { features = {"derive"}},alias="serde"})
---add_requires("cargo::serde_json 1.0.109",{alias="serde_json"})
-
-
 target("Lab1")
     set_kind("binary")
     add_files("src/Lab1.cpp")
@@ -34,16 +30,14 @@ target("Lab7")
     set_kind("binary")
     add_files("src/lab7.rs")
 
---target("Lab8")
---    set_kind("binary")
---  add_files("src/lab8.rs")
---  add_packages("serde")
---  add_packages("serde_json")
+target("Lab8")
+    set_kind("binary")
+    add_files("src/lab8.rs")
 
 target("Lab9")
     set_kind("binary")
     add_files("src/Lab9.cpp")
 
-target("Lab99(10)")
+target("Lab99(10)") -- name in this pattern for ordered run
     set_kind("binary")
     add_files("src/Lab10.cpp")

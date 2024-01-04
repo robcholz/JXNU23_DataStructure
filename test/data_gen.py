@@ -66,22 +66,3 @@ with open(cpp_file_path, 'w') as p_file:
 
 print("Written cpp path")
 
-# replace rust paths
-
-rust_file_path = os.path.join(os.path.join(project_path, 'src'), 'path.rs')
-data_path = os.path.join(os.path.join(project_path, 'test'), 'data')
-replacement_string_3 = os.path.join(data_path, 'graph.json')
-
-with open(rust_file_path, 'r') as p_file:
-    content = p_file.read()
-
-pattern_3 = r'static metadata_path: &str = "";'
-replacement_3 = f'static metadata_path: &str = "{replacement_string_3}";'
-content = re.sub(pattern_3, replacement_3, content)
-updated_content = re.sub(pattern_3, replacement_3, content)
-
-with open(rust_file_path, 'w') as p_file:
-    p_file.write(updated_content)
-
-print("Written rust path")
-
