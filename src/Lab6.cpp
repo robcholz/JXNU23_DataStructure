@@ -6,6 +6,8 @@
 #include <functional>
 #include <stack>
 
+#include "Murphy.hpp"
+
 
 template<typename T>
 struct ListNode {
@@ -359,12 +361,40 @@ Tree<std::string>* TreeSetupFromExpr(const std::string& str) {
 }
 
 int main() {
+    mur_profiler_module("Lab6");
+    std::cout<<"现有二叉树tree1:A(B,C(E,F(H,I),G),D)"<<std::endl;
+    std::cout<<"        tree2:AL(B,C(D,E),F(G,H(I,J)))"<<std::endl;
 	auto tree1 = TreeSetupFromExpr("A(B,C(E,F(H,I),G),D)");
 	auto tree2 = TreeSetupFromExpr("AL(B,C(D,E),F(G,H(I,J)))");
-	std::cout << TreeIsEquivalent(tree1->root, tree2->root) << std::endl;
-	levelorder(*tree1);
-	std::cout << std::endl;
-	PreOrder1(*tree1);
-	PostOrder1(*tree1);
+    mur_profiler_test_lambda(
+            "1.层次遍历tree1",
+            true,
+            [&](){
+                levelorder(*tree1);
+                std::cout << std::endl;
+            }
+            );
+    mur_profiler_test_lambda(
+            "2.非递归tree1前序遍历",
+            true,
+            [&](){
+                PreOrder1(*tree1);
+            }
+            );
+    mur_profiler_test_lambda(
+            "3.非递归后续遍历tree1",
+            true,
+            [&](){
+                PostOrder1(*tree1);
+                std::cout<<std::endl;
+            }
+            );
+    mur_profiler_test_lambda(
+            "4.判断两颗树(tree1,tree2)是否等价",
+            true,
+            [&](){
+                std::cout << TreeIsEquivalent(tree1->root, tree2->root) << std::endl;
+            }
+            );
 	return 0;
 }

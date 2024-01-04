@@ -1,7 +1,8 @@
 #include <iostream>
 #include <random>
 #include <functional>
-#include <chrono>
+
+#include "Murphy.hpp"
 
 
 class RandomGenerator {
@@ -84,6 +85,7 @@ public:
 };
 
 int main() {
+    mur_profiler_module("Lab1");
 	using ArrayT = int;
 	std::size_t length = 10000;
 
@@ -92,18 +94,14 @@ int main() {
 	Sort::fill<ArrayT>(array_bubble, length, []() { return RandomGenerator::getRange<ArrayT>(0, 1e3); });
 	Sort::fill<ArrayT>(array_quick, length, []() { return RandomGenerator::getRange<ArrayT>(0, 1e3); });
 
-	const auto start_bubble = std::chrono::high_resolution_clock::now();
-	Sort::bubbleSort<ArrayT>(array_bubble, length);
-	const auto end_bubble = std::chrono::high_resolution_clock::now();
-
-	const auto start_quick = std::chrono::high_resolution_clock::now();
-	Sort::selectionSort<ArrayT>(array_quick, length);
-	const auto end_quick = std::chrono::high_resolution_clock::now();
-
-	std::cout << "Bubble Sort: " << std::chrono::duration_cast<std::chrono::milliseconds>(end_bubble - start_bubble).count()
-	          << "ms" << std::endl;
-	std::cout << "Quick Sort: " << std::chrono::duration_cast<std::chrono::milliseconds>(end_quick - start_quick).count()
-	          << "ms" << std::endl;
+    mur_profiler_output_lambda(
+            "Bubble Sort",
+            [&](){Sort::bubbleSort<ArrayT>(array_bubble, length);return true;}
+            );
+    mur_profiler_output_lambda(
+            "Quick Sort",
+            [&](){Sort::selectionSort<ArrayT>(array_quick, length);return true;}
+    );
 
 	delete[] array_bubble;
 	delete[] array_quick;

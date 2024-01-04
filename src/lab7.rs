@@ -1,18 +1,15 @@
-use std::any::Any;
+mod murphy;
+
 use std::collections::linked_list::LinkedList;
-use std::env;
 
-
-#[derive(Debug)]
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 struct BinaryTreeNode<T> {
     left_node: Box<Option<BinaryTreeNode<T>>>,
     right_node: Box<Option<BinaryTreeNode<T>>>,
     value: T,
 }
 
-#[derive(Debug)]
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 struct BinaryTree<T> {
     root_node: Option<BinaryTreeNode<T>>,
     size: usize,
@@ -20,7 +17,11 @@ struct BinaryTree<T> {
 
 impl<T> BinaryTreeNode<T> {
     pub fn new(val: T) -> Self {
-        BinaryTreeNode { left_node: Box::default(), right_node: Box::default(), value: val }
+        BinaryTreeNode {
+            left_node: Box::default(),
+            right_node: Box::default(),
+            value: val,
+        }
     }
 
     pub fn set_value(&mut self, val: T) {
@@ -38,7 +39,10 @@ impl<T> BinaryTreeNode<T> {
 
 impl<T> BinaryTree<T> {
     pub const fn new() -> Self {
-        BinaryTree { root_node: None, size: 0 }
+        BinaryTree {
+            root_node: None,
+            size: 0,
+        }
     }
 
     pub fn set_root_node(&mut self, _root: Option<BinaryTreeNode<T>>) {
@@ -80,8 +84,10 @@ impl<T> BinaryTree<T> {
                         flag = !(symbol == "(" || symbol == ",");
                         if flag {
                             nodes_num += 1;
-                        } else { break; }
-                    }// convert symbols to tree node
+                        } else {
+                            break;
+                        }
+                    } // convert symbols to tree node
 
                     // this should be the _root value
                     temp_root_node = BinaryTreeNode::new("".to_string());
@@ -236,24 +242,42 @@ fn exchange_children(tree: &mut BinaryTree<String>) -> LinkedList<String> {
 }
 
 fn main() {
-    let expr="A(B(S,D),C(E,F))";
+    murphy::mur_profiler_module("Lab7");
+    let expr = "A(B(S,D),C(E,F))";
+    println!("示例表达式: {}", expr);
     let mut binary_tree = BinaryTree::<String>::new_from_expr(expr);
-    print!("1.前序非递归遍历: ");
-    for item in iterate_preorder_nonrecursive(&binary_tree).iter() { print!("{} ", item); }
-    println!();
-    print!("2.层次非递归遍历: ");
-    for item in iterate_levelorder_non_recursive(&binary_tree).iter() { print!("{} ", item); }
-    println!();
-    print!("3.前序遍历最后一个节点: ");
-    print!("{}", last_node_in_preorder_iteration(&binary_tree));
-    println!();
-    print!("4.后序遍历第一个节点: ");
-    print!("{}", first_node_in_lastorder_iteration(&binary_tree));
-    println!();
-    print!("5.左右子女互换: ");
-    for item in exchange_children(&mut binary_tree).iter() { print!("{} ", item); }
-    println!();
-    print!("6.表达式建树: Expression:{} ",expr);
-    print!("层次非递归遍历: ");
-    for item in iterate_levelorder_non_recursive(&binary_tree).iter() { print!("{} ", item); }
+    murphy::mur_profiler_test_lambda("1.前序非递归遍历", true, &|| {
+        for item in iterate_preorder_nonrecursive(&binary_tree).iter() {
+            print!("{} ", item);
+        }
+        println!();
+    });
+    murphy::mur_profiler_test_lambda("2.层次非递归遍历", true, &|| {
+        for item in iterate_levelorder_non_recursive(&binary_tree).iter() {
+            print!("{} ", item);
+        }
+        println!();
+    });
+    murphy::mur_profiler_test_lambda("3.前序遍历最后一个节点", true, &|| {
+        print!("{}", last_node_in_preorder_iteration(&binary_tree));
+        println!();
+    });
+    murphy::mur_profiler_test_lambda("4.后序遍历第一个节点", true, &|| {
+        print!("{}", first_node_in_lastorder_iteration(&binary_tree));
+        println!();
+    });
+    murphy::mur_profiler_test_lambda("5.左右子女互换", true, &|| {
+        let mut modified_tree = binary_tree.clone();
+        for item in exchange_children(&mut modified_tree).iter() {
+            print!("{} ", item);
+        }
+        println!();
+    });
+    murphy::mur_profiler_test_lambda("6.表达式建树", true, &|| {
+        println!("Expression:{} ", expr);
+        print!("层次非递归遍历: ");
+        for item in iterate_levelorder_non_recursive(&binary_tree).iter() {
+            print!("{} ", item);
+        }
+    });
 }

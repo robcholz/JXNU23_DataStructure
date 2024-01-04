@@ -7,14 +7,41 @@
 #include <chrono>
 #include <iostream>
 
+#define RESET   "\033[0m"
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define CYAN    "\033[36m"
+#define BOLDYELLOW  "\033[1m\033[33m"
+
+void mur_profiler_module(const char* name) {
+    std::cout << BOLDYELLOW << "-----" << name << "-----" << RESET << std::endl;
+}
+
+void mur_profiler_test_lambda(const char* name, bool status,const std::function<void()> &func) {
+    std::string result;
+    if (status) {
+        result = GREEN;
+        result += "Success";
+    } else {
+        result = RED;
+        result += "Unsuccess";
+    }
+    result += RESET;
+    std::cout << "[" << result << "] [" << CYAN << name << RESET << "]" << std::endl;
+    func();
+}
 
 void mur_profiler_output_lambda(const char* name, const std::function<bool()> &func) {
     std::string result;
     const auto start = std::chrono::high_resolution_clock::now();
-    if (func())
-        result = "Success";
-    else
-        result = "Unsuccess";
+    if (func()) {
+        result = GREEN;
+        result += "Success";
+    } else {
+        result = RED;
+        result += "Unsuccess";
+    }
+    result += RESET;
     const auto end = std::chrono::high_resolution_clock::now();
 
     const auto s = std::chrono::duration_cast<std::chrono::seconds>(end - start);
@@ -40,7 +67,7 @@ void mur_profiler_output_lambda(const char* name, const std::function<bool()> &f
             }
         }
     }
-    std::cout << "[" << result << "] [" << name << "] Spent: " << size << unit << std::endl;
+    std::cout << "[" << result << "] [" << CYAN << name << RESET << "] Spent: " << size << unit << std::endl;
 }
 
 void mur_profiler_output(const char* name, bool (* func)()) {
