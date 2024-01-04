@@ -6,7 +6,7 @@
 
 `xmake`
 
-`rustc`
+`rust&cargo`
 
 `c++17`
 
