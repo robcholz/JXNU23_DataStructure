@@ -22,3 +22,6 @@ xmake build
 ```shell
 xmake run --all
 ```
+
+## 结果
+- 所有结果在results/all.pdf中

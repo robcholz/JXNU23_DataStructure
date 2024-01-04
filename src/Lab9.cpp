@@ -247,8 +247,8 @@ bool findSearchSequence(uint64_t capacity, uint16_t key) {
     for (const auto &ele: sequence) {
         std::cout << ele << " ";
     }
-    std::cout << " }" << std::endl;
-    return result;
+    std::cout << " } " << result<<std::endl;
+    return true;
 }
 
 void profiler(bool (* func)(uint64_t, uint16_t)) {
