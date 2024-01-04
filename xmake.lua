@@ -1,4 +1,6 @@
+set_project("JXNU23_DataStructure")
 set_languages("cxx17")
+
 
 target("Lab1")
     set_kind("binary")

@@ -1,0 +1,10 @@
+//
+// Created by robcholz on 1/3/24.
+//
+#ifndef JXNU23_DATASTRUCTURE_PATH_H
+#define JXNU23_DATASTRUCTURE_PATH_H
+
+#define DISORDERED_SAMPLE_PATH ""
+#define ORDERED_SAMPLE_PATH ""
+
+#endif //JXNU23_DATASTRUCTURE_PATH_H
