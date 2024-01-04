@@ -250,8 +250,6 @@ void merge(int a[], int const left, int const mid,
     delete[] r_arr;
 }
 
-// begin is for left index and end is right index
-// of the sub-array of arr to be sorted
 void mergeSort(int array[], int const begin, int const end) {
     if (begin >= end)
         return;
@@ -265,59 +263,67 @@ void mergeSortWrapper(int a[], size_t n) {
     mergeSort(a, 0, n - 1);
 }
 
-int getMax(linklist* node) {
-    int max_val = INT_MIN;
-    linklist* temp = node;
-    while (temp != nullptr) {
-        max_val = std::max(max_val, temp->data);
-        temp = temp->next;
+int countDigits(linklist* head) {
+    int maxDigits = 0;
+    auto* curr = head;
+    while (curr) {
+        int digits = 0;
+        int num = curr->data;
+        while (num) {
+            num /= 10;
+            digits++;
+        }
+        if (digits > maxDigits)
+            maxDigits = digits;
+        curr = curr->next;
     }
-    return max_val;
+    return maxDigits;
 }
 
-void radixSort(linklist** head) {
-    if (*head == nullptr) {
-        return;
-    }
-    int max_val = getMax(*head);
-    int digits = log10(max_val) + 1;
-    for (int exp = 1; exp <= digits; exp++) {
-        linklist* output = nullptr;
-        linklist* temp = nullptr;
-        linklist* buckets[10] = { nullptr };
-        while (*head != nullptr) {
-            int digit = ((*head)->data / exp) % 10;
+int getDigit(int num, int pos) {
+    for (int i = 0; i < pos; i++)
+        num /= 10;
+    return num % 10;
+}
+
+void radixSort(linklist* list_head) {
+    auto head = list_head;
+    int maxDigits = countDigits(head);
+    for (int digitPos = 0; digitPos < maxDigits; digitPos++) {
+        linklist* buckets[10] = {nullptr};
+        linklist* tail[10] = {nullptr};
+        linklist* curr = head;
+
+        while (curr) {
+            int digit = getDigit(curr->data, digitPos);
             if (buckets[digit] == nullptr) {
-                buckets[digit] = *head;
+                buckets[digit] = curr;
+                tail[digit] = curr;
             } else {
-                temp = buckets[digit];
-                while (temp->next != nullptr) {
-                    temp = temp->next;
-                }
-                temp->next = *head;
+                tail[digit]->next = curr;
+                tail[digit] = curr;
             }
-
-            *head = (*head)->next;
+            curr = curr->next;
         }
+
+        head = nullptr;
+        linklist* last = nullptr;
         for (int i = 0; i < 10; i++) {
-            if (buckets[i] != nullptr) {
-                if (output == nullptr) {
-                    output = buckets[i];
-                    temp = output;
-                } else {
-                    temp->next = buckets[i];
-                    temp = temp->next;
-                }
-
-                temp->next = nullptr;
+            if (buckets[i]) {
+                if (head == nullptr)
+                    head = buckets[i];
+                else
+                    last->next = buckets[i];
+                last = tail[i];
             }
         }
-        *head = output;
+        if (last)
+            last->next = nullptr;
     }
 }
 
 void radixSortWrapper(int a[], size_t n) {
-    radixSort(&list.next);
+    radixSort(&list);
 }
 
 void initArrayData(int* array, const std::string &filename) {
@@ -354,11 +360,13 @@ void initListData(int* arr, linklist* head) {
 }
 
 int main() {
+    mur_profiler_module("Lab10");
     initArrayData(
             disorderedStorage,
             DISORDERED_SAMPLE_PATH
     );
     initListData(disorderedStorage, &list);
+    profile("Radix Sort", radixSortWrapper); // ok
     profile("Quick Sort", quickSortWrapper); // ok
     profile("Heap Sort", heapSort); // ok
     profile("Merge Sort", mergeSortWrapper); // ok
@@ -367,6 +375,5 @@ int main() {
     profile("Select Sort", selectSort); // ok
     profile("Insertion Sort", insertSort); //ok
     profile("Bubble Sort", bubbleSort); // ok
-    profile("Radix Sort", radixSortWrapper); // error TODO
     return 0;
 }

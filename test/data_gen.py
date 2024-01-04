@@ -44,14 +44,14 @@ generate_data('disordered_{}m.txt', size, lambda file, count: disorder_gen(file,
 generate_data('ordered_{}m.txt', size, lambda file, count: ordered_gen(file, count))
 print(f"Data of size {size} generated")
 
-# replace macros
+# replace cpp paths
 
-header_file_path = os.path.join(os.path.join(project_path, 'src'), 'Path.h')
+cpp_file_path = os.path.join(os.path.join(project_path, 'src'), 'Path.h')
 data_path = os.path.join(os.path.join(project_path, 'test'), 'data')
-replacement_string_1 = os.path.join(data_path, 'disordered_50m.txt')
-replacement_string_2 = os.path.join(data_path, 'ordered_50m.txt')
+replacement_string_1 = os.path.join(data_path, 'ordered_50m.txt')
+replacement_string_2 = os.path.join(data_path, 'disordered_50m.txt')
 
-with open(header_file_path, 'r') as p_file:
+with open(cpp_file_path, 'r') as p_file:
     content = p_file.read()
 
 pattern_1 = r'#define ORDERED_SAMPLE_PATH\s+""'
@@ -61,5 +61,27 @@ replacement_2 = f'#define DISORDERED_SAMPLE_PATH "{replacement_string_2}"'
 content = re.sub(pattern_1, replacement_1, content)
 updated_content = re.sub(pattern_2, replacement_2, content)
 
-with open(header_file_path, 'w') as p_file:
+with open(cpp_file_path, 'w') as p_file:
     p_file.write(updated_content)
+
+print("Written cpp path")
+
+# replace rust paths
+
+rust_file_path = os.path.join(os.path.join(project_path, 'src'), 'path.rs')
+data_path = os.path.join(os.path.join(project_path, 'test'), 'data')
+replacement_string_3 = os.path.join(data_path, 'graph.json')
+
+with open(rust_file_path, 'r') as p_file:
+    content = p_file.read()
+
+pattern_3 = r'static metadata_path: &str = "";'
+replacement_3 = f'static metadata_path: &str = "{replacement_string_3}";'
+content = re.sub(pattern_3, replacement_3, content)
+updated_content = re.sub(pattern_3, replacement_3, content)
+
+with open(rust_file_path, 'w') as p_file:
+    p_file.write(updated_content)
+
+print("Written rust path")
+

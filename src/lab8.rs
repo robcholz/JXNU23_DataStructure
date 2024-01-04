@@ -1,3 +1,5 @@
+mod path;
+
 use std::fs;
 use serde::{Deserialize, Serialize};
 
@@ -132,5 +134,6 @@ impl<VT, ET> MGraph<VT, ET> {
 }
 
 fn main(){
-    let graph = LinkedGraph::<String>::new("sdsds", true);
+    let graph = LinkedGraph::<String>::new(path::metadata_path, true);
+    println!("");
 }

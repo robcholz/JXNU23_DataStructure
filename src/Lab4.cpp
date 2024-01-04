@@ -439,6 +439,7 @@ int main() {
                 int next[20];
                 getnext(create_seqstr("_ess"), next);
                 std::cout << kmp(create_seqstr("tdes_es_ess_es"), create_seqstr("_ess"), next);
+                std::cout<<std::endl;
             }
     );
     return 0;

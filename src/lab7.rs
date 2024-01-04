@@ -279,5 +279,6 @@ fn main() {
         for item in iterate_levelorder_non_recursive(&binary_tree).iter() {
             print!("{} ", item);
         }
+        println!("");
     });
 }

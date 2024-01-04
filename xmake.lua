@@ -44,6 +44,6 @@ target("Lab9")
     set_kind("binary")
     add_files("src/Lab9.cpp")
 
-target("Lab10")
+target("Lab99(10)")
     set_kind("binary")
     add_files("src/Lab10.cpp")

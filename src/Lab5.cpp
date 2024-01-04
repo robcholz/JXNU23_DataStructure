@@ -275,6 +275,7 @@ int main() {
                 create(list1.get(), {7, 2, 3, 4, 5, 6, 7, 7, 4, 4, 10, 7});
                 preserve(list1.get(), 7);
                 print(list1.get());
+                std::cout<<std::endl;
             }
             );
     return 0;

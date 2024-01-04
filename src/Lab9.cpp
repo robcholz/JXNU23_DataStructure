@@ -306,6 +306,7 @@ void initArrayData(int* array, const std::string &filename) {
 }
 
 int main() {
+    mur_profiler_module("Lab9");
     initArrayData(orderedStorage,
                   ORDERED_SAMPLE_PATH
                   );
